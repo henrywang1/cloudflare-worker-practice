@@ -85,12 +85,14 @@ class DivTransformer {
       element.setAttribute('style', style);
     }
     if (this.id == 'links') {
+      element.setAttribute('class', element.getAttribute('class') + ' mt-8 mb-4');
       this.links.slice().reverse().forEach(link => element.prepend(
         `<a href='${link.url}'>${link.name}</a>`, {
           html: true
         }));
     }
     if (this.id == 'social') {
+      element.setAttribute('class', element.getAttribute('class') + ' w-10/12');
       this.links.slice().reverse().forEach(link => element.prepend(
         `<a style='display: inline-block; margin: 0; width: 68px; height: 68px;' href='${link.url}'>
           ${link.svg}
