@@ -6,7 +6,7 @@ import {
 import {
   defaultData,
   static_url
-} from './settings';
+} from './constant';
 
 const DEBUG = false
 const setCache = (key, data) => PRACTICE.put(key, data);
@@ -92,7 +92,7 @@ class DivTransformer {
         }));
     }
     if (this.id == 'social') {
-      element.setAttribute('class', element.getAttribute('class') + ' w-10/12');
+      element.setAttribute('class', element.getAttribute('class') + ' w-8/12');
       this.links.slice().reverse().forEach(link => element.prepend(
         `<a style='display: inline-block; margin: 0; width: 68px; height: 68px;' href='${link.url}'>
           ${link.svg}
@@ -134,8 +134,12 @@ async function handleEvent(event) {
         bypassCache: true,
       }
     }
+
+    if (!url.pathname.endsWith("/") && !url.pathname.includes(".")) {
+      url.pathname += '/'
+    }
     let data;
-    if (url.pathname == '/' || url.pathname == '/links') {
+    if (url.pathname == '/' || url.pathname == '/links/') {
       data = await getLinks();
     }
     if (url.pathname == '/') {
@@ -165,9 +169,6 @@ async function handleEvent(event) {
         .on('svg', {
           element: e => e.setAttribute('class', 'hover:opacity-75 display: block margin: auto')
         })
-
-      // class='hover:opacity-75 display: block margin: auto'
-
       const response = await fetch(static_url, init)
       const results = await gatherResponse(response)
       const res = new Response(results, init);
@@ -175,7 +176,7 @@ async function handleEvent(event) {
       return rewriter_svg.transform(res_svg);
     }
 
-    if (url.pathname == '/links') {
+    if (url.pathname == '/links/') {
       const json = JSON.stringify(data, null, 2)
       return new Response(json, {
         headers: {
